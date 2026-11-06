@@ -35,10 +35,11 @@ describe("review links and ratings", () => {
     expect(googleReviewUrlError("https://accounts.google.com/signin")).toBeTruthy();
   });
 
-  it("sends three stars or more straight to Google", () => {
+  it("sends four stars or more straight to Google", () => {
     expect(reviewPanels(1)).toEqual({ primary: "feedback", secondary: "google" });
     expect(reviewPanels(2)).toEqual({ primary: "feedback", secondary: "google" });
-    expect(reviewPanels(3)).toEqual({ primary: "google", secondary: null });
+    expect(reviewPanels(3)).toEqual({ primary: "feedback", secondary: "google" });
+    expect(reviewPanels(4)).toEqual({ primary: "google", secondary: null });
     expect(reviewPanels(5)).toEqual({ primary: "google", secondary: null });
     expect(reviewPanels(0)).toBeNull();
   });

@@ -241,7 +241,7 @@ export function PublicPage() {
             accent={accent}
             onChange={(next) => {
               setRating(next);
-              if (next >= 3)
+              if (next >= 4)
                 window.location.assign(page.google_review_url);
             }}
           />

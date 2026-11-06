@@ -131,7 +131,7 @@ Accepted Google links:
 
 The Google button opens that link. This app does not submit a review or ask for a Google password.
 
-A 1- or 2-star choice shows the private form first. A 3-, 4-, or 5-star choice shows the Google button first. The other option stays on the same screen for every rating.
+A 1-, 2-, or 3-star choice shows the private feedback form. A 4- or 5-star choice goes straight to the Google review page.
 
 ## Checks
 
