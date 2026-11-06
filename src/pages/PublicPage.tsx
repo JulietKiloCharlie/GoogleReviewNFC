@@ -119,10 +119,12 @@ export function PublicPage() {
           Email <span className="font-normal text-muted">(optional)</span>
           <input className={`${field} mt-1.5`} type="email" value={email} onChange={(event) => setEmail(event.target.value)} />
         </label>
-        <label className="absolute h-0 overflow-hidden" aria-hidden="true">
-          Company website
-          <input tabIndex={-1} autoComplete="off" value={honeypot} onChange={(event) => setHoneypot(event.target.value)} />
-        </label>
+        <div className="hidden" aria-hidden="true">
+          <label>
+            Company website
+            <input tabIndex={-1} autoComplete="off" value={honeypot} onChange={(event) => setHoneypot(event.target.value)} />
+          </label>
+        </div>
         <button className={btnPrimary} style={{ background: accent, color: "#101114" }} disabled={busy} type="submit">
           {busy ? "Sending…" : "Submit feedback"}
         </button>
@@ -155,22 +157,29 @@ export function PublicPage() {
         {page.description ? <p className="mt-2 text-sm text-muted">{page.description}</p> : null}
         <p className="mt-6 text-lg">{page.welcome_message}</p>
         <div className="mt-4">
-          <Stars value={rating} accent={accent} onChange={setRating} />
+          <Stars
+            value={rating}
+            accent={accent}
+            onChange={(next) => {
+              setRating(next);
+              if (next >= 3) window.location.assign(page.google_review_url);
+            }}
+          />
         </div>
-        {panels ? (
+        {panels?.primary === "feedback" ? (
           <div className="mt-6 w-full space-y-6 text-left">
-            <section className="rounded-2xl border border-line bg-panel p-4">
-              {panels.primary === "feedback" ? feedbackForm() : googlePanel()}
-            </section>
-            <section className="rounded-2xl border border-line p-4">
-              <h2 className="mb-3 text-sm font-semibold text-muted">
-                {panels.secondary === "google" ? "You can also leave a public Google review" : "You can also send a private note"}
-              </h2>
-              {panels.secondary === "feedback" ? feedbackForm() : googlePanel()}
-            </section>
+            <section className="rounded-2xl border border-line bg-panel p-4">{feedbackForm()}</section>
+            {panels.secondary === "google" ? (
+              <section className="rounded-2xl border border-line p-4">
+                <h2 className="mb-3 text-sm font-semibold text-muted">You can also leave a public Google review</h2>
+                {googlePanel()}
+              </section>
+            ) : null}
           </div>
+        ) : panels ? (
+          <p className="mt-6 text-sm text-muted">Opening Google Reviews…</p>
         ) : (
-          <p className="mt-6 text-sm text-muted">Choose a star rating. Private feedback and Google reviews both stay available.</p>
+          <p className="mt-6 text-sm text-muted">Choose a star rating.</p>
         )}
       </div>
       <p className="mt-10 text-center text-xs text-muted">Powered by Syntrex</p>
