@@ -1,6 +1,7 @@
 
 import { FormEvent, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { BrandLogo } from "@/components/BrandLogo";
 import { Stars } from "@/components/Stars";
 import { fetchPublicPage } from "@/lib/businesses";
 import { reviewPanels } from "@/lib/rating";
@@ -262,9 +263,9 @@ export function PublicPage() {
           </p>
         )}
       </div>
-      <p className="mt-10 text-center text-xs text-muted">
-        Powered by Syntrex Group Limited
-      </p>
+      <div className="mt-10 flex justify-center">
+        <BrandLogo className="h-8 w-auto rounded-md" />
+      </div>
     </main>
   );
 }

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { BrandLogo } from "@/components/BrandLogo";
 import { supabase, supabaseConfigured } from "@/lib/supabase";
 
 export function VerifyEmailPage() {
@@ -27,7 +28,7 @@ export function VerifyEmailPage() {
 
   return (
     <main className="mx-auto flex min-h-screen max-w-lg flex-col justify-center px-4">
-      <p className="text-xs tracking-wide text-accent">Syntrex Group Limited</p>
+      <BrandLogo />
       <h1 className="mt-2 text-3xl font-semibold">Feedback email</h1>
       <p className="mt-4 text-muted">{supabaseConfigured ? message : "Supabase is not configured."}</p>
     </main>

@@ -1,5 +1,6 @@
 import { NavLink, Outlet } from "react-router-dom";
 import { useAuth } from "@/auth/AuthProvider";
+import { BrandLogo } from "@/components/BrandLogo";
 
 const links = [
   { to: "/admin", label: "Overview", end: true },
@@ -16,7 +17,7 @@ export function AdminLayout() {
       <header className="border-b border-line">
         <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-4 px-4 py-4">
           <div className="mr-auto">
-            <p className="text-xs tracking-wide text-accent">Syntrex Group Limited</p>
+            <BrandLogo className="h-10 w-auto rounded-md" />
             <p className="font-semibold">Google Review NFC Dashboard</p>
           </div>
           <nav className="flex flex-wrap gap-2">

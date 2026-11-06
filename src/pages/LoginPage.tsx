@@ -1,6 +1,7 @@
 import { FormEvent, useState } from "react";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import { useAuth } from "@/auth/AuthProvider";
+import { BrandLogo } from "@/components/BrandLogo";
 import { SetupNotice } from "@/components/SetupNotice";
 import { readableError } from "@/lib/errors";
 import { supabase } from "@/lib/supabase";
@@ -59,7 +60,7 @@ export function LoginPage() {
 
   return (
     <main className="mx-auto flex min-h-screen max-w-md flex-col justify-center px-4 py-10">
-      <p className="text-xs tracking-wide text-accent">Syntrex Group Limited</p>
+      <BrandLogo />
       <h1 className="mt-2 text-3xl font-semibold leading-tight">Google Review NFC Dashboard</h1>
       <p className="mt-2 text-sm text-muted">Private dashboard for Syntrex Group Limited administrators.</p>
       <div className="mt-6">{auth.configured ? null : <SetupNotice />}</div>
