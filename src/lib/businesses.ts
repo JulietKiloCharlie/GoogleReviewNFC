@@ -45,12 +45,14 @@ export async function fetchPublicPage(slug: string): Promise<PublicPage | null> 
 
 export async function resendVerification(businessId: string): Promise<string | null> {
   const client = requireClient();
-  const { data, error } = await client.functions.invoke("request-email-verification", {
-    body: { businessId },
+  const { data, error } = await client.rpc("request_feedback_inbox_confirmation", {
+    target_business: businessId,
   });
-  if (error) return "The page was saved, but the verification email could not be sent.";
-  if (data && typeof data === "object" && "error" in data && typeof data.error === "string") {
-    return data.error;
+  if (error) return "The page was saved, but the confirmation email could not be sent.";
+  if (data && typeof data === "object" && "ok" in data && data.ok === false) {
+    return "error" in data && typeof data.error === "string"
+      ? data.error
+      : "The confirmation email could not be sent.";
   }
   return null;
 }
@@ -59,16 +61,18 @@ async function syncFeedbackEmail(business: Business, nextEmail: string): Promise
   const client = requireClient();
   const email = nextEmail.trim().toLowerCase();
   if (!email) return null;
-  if (business.feedback_email === email && business.feedback_email_verified && business.pending_feedback_email === email) {
-    return null;
-  }
-  if (business.feedback_email === email && business.feedback_email_verified && !business.pending_feedback_email) {
+  if (business.pending_feedback_email === email || (business.feedback_email === email && business.feedback_email_verified)) {
     return null;
   }
 
-  const { error } = await client.from("businesses").update({ pending_feedback_email: email }).eq("id", business.id);
+  const { error } = await client
+    .from("businesses")
+    .update({
+      pending_feedback_email: email,
+      feedback_email_verified: business.feedback_email === email ? business.feedback_email_verified : false,
+    })
+    .eq("id", business.id);
   if (error) throw error;
-  if (business.feedback_email === email && business.feedback_email_verified) return null;
   return resendVerification(business.id);
 }
 

@@ -143,7 +143,7 @@ export function BusinessFormPage() {
   const emailState = existing?.feedback_email_verified
     ? `Verified: ${existing.feedback_email}`
     : existing?.pending_feedback_email
-      ? `Waiting for ${existing.pending_feedback_email} to confirm the verification email.`
+      ? `Waiting for ${existing.pending_feedback_email} to open the FormSubmit confirmation email.`
       : "Verification is required before private feedback can be delivered.";
 
   return (
@@ -183,7 +183,7 @@ export function BusinessFormPage() {
         </label>
         {existing?.pending_feedback_email && !existing.feedback_email_verified ? (
           <button className={btnGhost} type="button" disabled={busy} onClick={resend}>
-            Resend verification email
+            Send confirmation email
           </button>
         ) : null}
         <label className={label}>
