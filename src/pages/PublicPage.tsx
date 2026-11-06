@@ -127,7 +127,7 @@ export function PublicPage() {
           {busy ? "Sending…" : "Submit feedback"}
         </button>
         <p className="text-xs leading-5 text-muted">
-          Your message is emailed directly to the business by FormSubmit. Syntrex does not store it. The business may need to confirm that inbox the first time. You do not need an account.
+          Your message is emailed directly to the business. Syntrex does not store it. You do not need an account.
         </p>
         {error ? <p className="text-sm text-bad">{error}</p> : null}
       </form>

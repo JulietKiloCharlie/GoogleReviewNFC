@@ -128,7 +128,12 @@ export function BusinessFormPage() {
   async function resend() {
     if (!existing) return;
     setBusy(true);
-    setEmailWarning(await resendVerification(existing.id));
+    const warning = await resendVerification(existing.id);
+    setEmailWarning(warning);
+    if (!warning) {
+      const fresh = await getBusiness(existing.id);
+      if (fresh) setExisting(fresh);
+    }
     setBusy(false);
   }
 
@@ -143,7 +148,7 @@ export function BusinessFormPage() {
   const emailState = existing?.feedback_email_verified
     ? `Verified: ${existing.feedback_email}`
     : existing?.pending_feedback_email
-      ? `Waiting for ${existing.pending_feedback_email} to open the FormSubmit confirmation email.`
+      ? `A confirmation email still needs to be sent to ${existing.pending_feedback_email}.`
       : "Verification is required before private feedback can be delivered.";
 
   return (
