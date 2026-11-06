@@ -12,6 +12,26 @@ export function isEmail(value: string): boolean {
   return value.length <= 320 && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
 }
 
+const PLACE_ID = /^[A-Za-z0-9_-]{8,255}$/;
+const MAPS_URL = [
+  /^https:\/\/maps\.app\.goo\.gl\/.+$/,
+  /^https:\/\/maps\.google\.[a-z.]{2,20}\/.+$/,
+  /^https:\/\/(?:www\.)?google\.[a-z.]{2,20}\/maps.+$/,
+];
+
+export function placeIdError(value: string): string | null {
+  const id = value.trim();
+  if (!id) return null;
+  if (!PLACE_ID.test(id)) return "The Google Place ID from that listing could not be used.";
+  return null;
+}
+
+export function acceptableMapsUrl(value: string): string {
+  const url = value.trim();
+  if (!url || url.length > 500 || /\s/.test(url)) return "";
+  return MAPS_URL.some((pattern) => pattern.test(url)) ? url : "";
+}
+
 export function googleReviewUrlError(value: string): string | null {
   const url = value.trim();
   if (!url) return "Enter the Google review link.";

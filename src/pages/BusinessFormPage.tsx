@@ -1,5 +1,6 @@
 import { FormEvent, useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
+import { GoogleBusinessSearch } from "@/components/GoogleBusinessSearch";
 import { QrCard } from "@/components/QrCard";
 import {
   createBusiness,
@@ -10,18 +11,22 @@ import {
   type SaveMode,
 } from "@/lib/businesses";
 import { DEFAULT_ACCENT, DEFAULT_THANKS, DEFAULT_WELCOME, LIMITS } from "@/lib/constants";
+import { listingReplacements, type GoogleListing } from "@/lib/googlePlaces";
 import { logoFileError } from "@/lib/logo";
 import { slugError, slugify } from "@/lib/slug";
 import { btnGhost, btnPrimary, field, hint, label } from "@/lib/styles";
 import type { Business, BusinessInput } from "@/lib/types";
 import { businessUrl } from "@/lib/urls";
-import { googleReviewUrlError, isEmail, safeAccent } from "@/lib/validation";
+import { acceptableMapsUrl, googleReviewUrlError, isEmail, placeIdError, safeAccent } from "@/lib/validation";
 
 const empty: BusinessInput = {
   name: "",
   slug: "",
   description: "",
+  address: "",
   feedbackEmail: "",
+  googlePlaceId: "",
+  googleMapsUrl: "",
   googleReviewUrl: "",
   welcomeMessage: DEFAULT_WELCOME,
   thankYouMessage: DEFAULT_THANKS,
@@ -33,7 +38,10 @@ function inputFromBusiness(business: Business): BusinessInput {
     name: business.name,
     slug: business.slug,
     description: business.description ?? "",
+    address: business.address ?? "",
     feedbackEmail: business.pending_feedback_email || business.feedback_email || "",
+    googlePlaceId: business.google_place_id ?? "",
+    googleMapsUrl: business.google_maps_url ?? "",
     googleReviewUrl: business.google_review_url,
     welcomeMessage: business.welcome_message,
     thankYouMessage: business.thank_you_message,
@@ -52,6 +60,7 @@ export function BusinessFormPage() {
   const [emailWarning, setEmailWarning] = useState<string | null>(null);
   const [publishedUrl, setPublishedUrl] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
+  const [reviewCopied, setReviewCopied] = useState(false);
   const [busy, setBusy] = useState(false);
   const [loading, setLoading] = useState(Boolean(id));
 
@@ -84,8 +93,14 @@ export function BusinessFormPage() {
     if (!form.name.trim() || form.name.trim().length > LIMITS.name) return "Enter the business name.";
     const slugProblem = slugError(form.slug.trim());
     if (slugProblem) return slugProblem;
+    if (form.address.length > LIMITS.address) return "The address is too long.";
     const reviewProblem = googleReviewUrlError(form.googleReviewUrl);
     if (reviewProblem) return reviewProblem;
+    const placeProblem = placeIdError(form.googlePlaceId);
+    if (placeProblem) return placeProblem;
+    if (form.googleMapsUrl.trim() && acceptableMapsUrl(form.googleMapsUrl) !== form.googleMapsUrl.trim()) {
+      return "Enter a valid Google Maps link, or clear it.";
+    }
     if (!isEmail(form.feedbackEmail.trim())) return "Enter a valid private feedback email.";
     if (form.description.length > LIMITS.description) return "The description is too long.";
     if (!form.welcomeMessage.trim() || form.welcomeMessage.length > LIMITS.welcome) return "Enter a shorter welcome message.";
@@ -137,6 +152,40 @@ export function BusinessFormPage() {
     setBusy(false);
   }
 
+  function applyListing(listing: GoogleListing): boolean {
+    const replacements = listingReplacements(form, listing);
+    if (
+      replacements.length > 0 &&
+      !window.confirm(`Replace the ${replacements.join(", ")} with the Google listing for ${listing.name || "this business"}?`)
+    ) {
+      return false;
+    }
+    setForm((current) => {
+      const next = {
+        ...current,
+        name: listing.name || current.name,
+        address: listing.address || current.address,
+        googlePlaceId: listing.placeId,
+        googleMapsUrl: listing.mapsUrl,
+        googleReviewUrl: listing.reviewUrl,
+      };
+      if (!slugEdited) next.slug = slugify(next.name);
+      return next;
+    });
+    setReviewCopied(false);
+    return true;
+  }
+
+  async function copyReviewLink() {
+    const problem = googleReviewUrlError(form.googleReviewUrl);
+    if (problem) {
+      setError(problem);
+      return;
+    }
+    await navigator.clipboard.writeText(form.googleReviewUrl.trim());
+    setReviewCopied(true);
+  }
+
   async function copy() {
     if (!publishedUrl) return;
     await navigator.clipboard.writeText(publishedUrl);
@@ -158,9 +207,15 @@ export function BusinessFormPage() {
           <h1 className="text-3xl font-semibold">{existing ? "Edit business" : "Add business"}</h1>
           <p className="mt-1 text-sm text-muted">One form publishes the review page. The NFC card keeps the same link.</p>
         </div>
+        <GoogleBusinessSearch onApply={applyListing} />
         <label className={label}>
           Business name
           <input className={`${field} mt-1.5`} maxLength={LIMITS.name} value={form.name} onChange={(event) => update("name", event.target.value)} required />
+        </label>
+        <label className={label}>
+          Business address
+          <input className={`${field} mt-1.5`} maxLength={LIMITS.address} value={form.address} onChange={(event) => update("address", event.target.value)} />
+          <span className={hint}>Filled from the selected Google listing. You can edit it before saving.</span>
         </label>
         <label className={label}>
           Page address
@@ -178,9 +233,40 @@ export function BusinessFormPage() {
         </label>
         <label className={label}>
           Google review URL
-          <input className={`${field} mt-1.5`} inputMode="url" placeholder="https://search.google.com/local/writereview?placeid=…" value={form.googleReviewUrl} onChange={(event) => update("googleReviewUrl", event.target.value)} required />
-          <span className={hint}>Use the business’s own Google review link. Customers finish the review on Google.</span>
+          <input
+            className={`${field} mt-1.5`}
+            inputMode="url"
+            placeholder="https://search.google.com/local/writereview?placeid=…"
+            value={form.googleReviewUrl}
+            onChange={(event) => {
+              setReviewCopied(false);
+              setForm((current) => ({ ...current, googleReviewUrl: event.target.value, googlePlaceId: "" }));
+            }}
+            required
+          />
+          <span className={hint}>Filled when you select a Google listing. You can still paste a review link by hand.</span>
         </label>
+        <div className="space-y-2">
+          <p className={label}>Google Review Link</p>
+          <p className="break-all text-sm text-accent">{form.googleReviewUrl.trim() || "No review link yet."}</p>
+          {form.googleReviewUrl.trim() && googleReviewUrlError(form.googleReviewUrl) ? (
+            <p className="text-sm text-bad">{googleReviewUrlError(form.googleReviewUrl)}</p>
+          ) : null}
+          <div className="flex flex-wrap gap-2">
+            {googleReviewUrlError(form.googleReviewUrl) === null ? (
+              <a className={btnGhost} href={form.googleReviewUrl.trim()} target="_blank" rel="noreferrer">
+                Test Review Link
+              </a>
+            ) : (
+              <button className={btnGhost} type="button" onClick={() => setError(googleReviewUrlError(form.googleReviewUrl))}>
+                Test Review Link
+              </button>
+            )}
+            <button className={btnGhost} type="button" onClick={() => void copyReviewLink()}>
+              {reviewCopied ? "Copied" : "Copy Review Link"}
+            </button>
+          </div>
+        </div>
         <label className={label}>
           Private feedback email
           <input className={`${field} mt-1.5`} type="email" value={form.feedbackEmail} onChange={(event) => update("feedbackEmail", event.target.value)} required />

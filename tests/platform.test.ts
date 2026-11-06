@@ -2,7 +2,8 @@ import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { nextSlug, slugError, slugify } from "../src/lib/slug";
 import { reviewPanels } from "../src/lib/rating";
-import { googleReviewUrlError, isEmail, messageError } from "../src/lib/validation";
+import { listingFromPlaceId, listingReplacements, mapsUrlForPlace, reviewUrlForPlace } from "../src/lib/googlePlaces";
+import { acceptableMapsUrl, googleReviewUrlError, isEmail, messageError, placeIdError } from "../src/lib/validation";
 
 describe("slugs", () => {
   it("turns a business name into a stable page address", () => {
@@ -40,6 +41,39 @@ describe("review links and ratings", () => {
     expect(reviewPanels(3)).toEqual({ primary: "google", secondary: null });
     expect(reviewPanels(5)).toEqual({ primary: "google", secondary: null });
     expect(reviewPanels(0)).toBeNull();
+  });
+
+  it("builds a review link from a Google Place ID", () => {
+    const placeId = "ChIJ-etyEK8NZ0gRPQ_GP31lFw0";
+    const generated = `https://search.google.com/local/writereview?placeid=${placeId}`;
+    expect(reviewUrlForPlace(placeId, null)).toBe(generated);
+    expect(reviewUrlForPlace(placeId, "https://example.com/review")).toBe(generated);
+    expect(reviewUrlForPlace(placeId, "https://g.page/r/coffee/review")).toBe("https://g.page/r/coffee/review");
+    expect(mapsUrlForPlace(placeId)).toBe(`https://www.google.com/maps/search/?api=1&query_place_id=${placeId}`);
+    expect(listingFromPlaceId(placeId).reviewUrl).toBe(generated);
+    expect(googleReviewUrlError(reviewUrlForPlace(placeId, null))).toBeNull();
+    expect(placeIdError(placeId)).toBeNull();
+    expect(placeIdError("")).toBeNull();
+    expect(placeIdError("not a place")).toBeTruthy();
+    expect(acceptableMapsUrl("https://www.google.com/maps/place/Dublin")).toContain("google.com/maps");
+    expect(acceptableMapsUrl("https://example.com/maps")).toBe("");
+  });
+
+  it("asks before replacing details the administrator already typed", () => {
+    const listing = {
+      placeId: "ChIJgaAzvKQPZ0gRreM8GOCkdDE",
+      name: "The Coffee Drop",
+      address: "72B Shantalla Rd, Dublin",
+      reviewUrl: "https://search.google.com/local/writereview?placeid=ChIJgaAzvKQPZ0gRreM8GOCkdDE",
+      mapsUrl: "https://www.google.com/maps/place/The+Coffee+Drop",
+    };
+    expect(listingReplacements({ name: "", address: "", googleReviewUrl: "", googleMapsUrl: "" }, listing)).toEqual([]);
+    expect(
+      listingReplacements(
+        { name: "Test cafe", address: "Old address", googleReviewUrl: "https://g.page/r/old/review", googleMapsUrl: "" },
+        listing,
+      ),
+    ).toEqual(["business name", "address", "Google review link"]);
   });
 
   it("checks email and feedback text", () => {

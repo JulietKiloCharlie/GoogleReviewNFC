@@ -15,6 +15,7 @@ export const LIMITS = {
   name: 120,
   slug: 80,
   description: 280,
+  address: 300,
   welcome: 160,
   thanks: 200,
   message: 2000,

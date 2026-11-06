@@ -6,9 +6,12 @@ export type Business = {
   slug: string;
   logo_path: string | null;
   description: string | null;
+  address: string | null;
   feedback_email: string | null;
   feedback_email_verified: boolean;
   pending_feedback_email: string | null;
+  google_place_id: string | null;
+  google_maps_url: string | null;
   google_review_url: string;
   welcome_message: string;
   thank_you_message: string;
@@ -34,7 +37,10 @@ export type BusinessInput = {
   name: string;
   slug: string;
   description: string;
+  address: string;
   feedbackEmail: string;
+  googlePlaceId: string;
+  googleMapsUrl: string;
   googleReviewUrl: string;
   welcomeMessage: string;
   thankYouMessage: string;

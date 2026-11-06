@@ -103,11 +103,20 @@ The files `public/_redirects` and `public/_headers` are included so page links a
 
 A business is not “published” in the dashboard until the database write succeeds and the public page can be read back.
 
+## Google business search
+
+On the add and edit forms, type a business name. Google’s Place Autocomplete returns a dropdown of matching listings. Choose one and the review link, name, and address fill in. The link is Google’s write-a-review address when it provides one, otherwise `https://search.google.com/local/writereview?placeid=PLACE_ID`. One Maps key covers every business. The NFC page address does not change. A review link can still be pasted by hand.
+
+1. In Google Cloud, enable billing, **Maps JavaScript API**, and **Places API (New)**.
+2. Create a browser API key restricted to those APIs and to `http://127.0.0.1:5173/*`, `http://localhost:5173/*`, and `https://julietkilocharlie.github.io/*`.
+3. Put it in `.env.local` as `VITE_GOOGLE_MAPS_API_KEY` for this PC. For the live site, save the same value as the GitHub secret `GOOGLE_MAPS_API_KEY` and redeploy.
+4. Run `supabase/migrations/20261106220000_google_place.sql` once in the Supabase SQL editor.
+
 ## 5. Add a client
 
 1. Sign in.
 2. Choose **Add Business**.
-3. Enter the name, Google review link, and the business email.
+3. Type the business name, choose it from the Google dropdown, and add the business email. A review link can be pasted instead.
 4. Add a PNG, JPG, or WebP logo if you have one. SVG is rejected.
 5. Choose **Create & Publish**.
 6. Copy the verified HTTPS URL.
