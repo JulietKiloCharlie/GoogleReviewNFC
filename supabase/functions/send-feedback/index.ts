@@ -85,8 +85,8 @@ Deno.serve(async (request) => {
       "",
       message,
       "",
-      "This message was sent from the Syntrex review page so the business could read it directly.",
-      "Syntrex does not store the message.",
+      "This message was sent from the Syntrex Group Limited review page so the business could read it directly.",
+      "Syntrex Group Limited does not store the message.",
     ].join("\n"),
     customerEmail || undefined,
   );

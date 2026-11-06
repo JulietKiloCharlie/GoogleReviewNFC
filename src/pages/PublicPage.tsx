@@ -127,7 +127,7 @@ export function PublicPage() {
           {busy ? "Sending…" : "Submit feedback"}
         </button>
         <p className="text-xs leading-5 text-muted">
-          Your message is emailed directly to the business. Syntrex does not store it. You do not need an account.
+          Your message is emailed directly to the business. Syntrex Group Limited does not store it. You do not need an account.
         </p>
         {error ? <p className="text-sm text-bad">{error}</p> : null}
       </form>
@@ -179,7 +179,7 @@ export function PublicPage() {
           <p className="mt-6 text-sm text-muted">Choose a star rating.</p>
         )}
       </div>
-      <p className="mt-10 text-center text-xs text-muted">Powered by Syntrex</p>
+      <p className="mt-10 text-center text-xs text-muted">Powered by Syntrex Group Limited</p>
     </main>
   );
 }

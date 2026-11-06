@@ -29,10 +29,10 @@ begin
   end if;
 
   payload := jsonb_build_object(
-    'name', 'Syntrex',
+    'name', 'Syntrex Group Limited',
     'message', concat(
       'Confirm this inbox so private review notes for ', business_name, ' can be delivered.', E'\n\n',
-      'If this is the first email, open the message from FormSubmit and activate the address. Later customer notes will arrive here. Syntrex does not store them.'
+      'If this is the first email, open the message from FormSubmit and activate the address. Later customer notes will arrive here. Syntrex Group Limited does not store them.'
     ),
     '_subject', 'Confirm feedback email for ' || business_name,
     '_captcha', 'false',

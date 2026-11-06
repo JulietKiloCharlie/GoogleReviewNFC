@@ -29,7 +29,7 @@ Deno.serve(async (request) => {
     .maybeSingle();
 
   if (!row || new Date(row.expires_at).getTime() < Date.now()) {
-    return json({ error: "This confirmation link has expired. Ask Syntrex to send a new one." }, 400);
+    return json({ error: "This confirmation link has expired. Ask Syntrex Group Limited to send a new one." }, 400);
   }
 
   const { error } = await service

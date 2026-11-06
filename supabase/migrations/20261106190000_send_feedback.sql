@@ -93,7 +93,7 @@ begin
       'Name: ', case when clean_name = '' then 'Not provided' else clean_name end, E'\n',
       'Email: ', case when clean_customer_email = '' then 'Not provided' else clean_customer_email end, E'\n\n',
       clean_message, E'\n\n',
-      'This message was sent from the Syntrex review page so the business could read it directly. Syntrex does not store the message.'
+      'This message was sent from the Syntrex Group Limited review page so the business could read it directly. Syntrex Group Limited does not store the message.'
     ),
     '_subject', 'New private feedback for ' || business_name,
     '_captcha', 'false',

@@ -35,7 +35,7 @@ export function SettingsPage() {
     setError(null);
     const { data, error: enrollError } = await supabase.auth.mfa.enroll({
       factorType: "totp",
-      friendlyName: "Syntrex admin",
+      friendlyName: "Syntrex Group Limited admin",
     });
     if (enrollError || !data) {
       setError(enrollError ? readableError(enrollError) : "The authenticator could not be started.");

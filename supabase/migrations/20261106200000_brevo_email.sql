@@ -40,7 +40,7 @@ begin
 
   clean_reply := btrim(coalesce(reply_to, ''));
   payload := jsonb_build_object(
-    'sender', jsonb_build_object('name', 'Syntrex', 'email', sender_email),
+    'sender', jsonb_build_object('name', 'Syntrex Group Limited', 'email', sender_email),
     'to', jsonb_build_array(jsonb_build_object('email', recipient)),
     'subject', left(subject, 180),
     'textContent', body
@@ -179,7 +179,7 @@ begin
       'Name: ', case when clean_name = '' then 'Not provided' else clean_name end, E'\n',
       'Email: ', case when clean_customer_email = '' then 'Not provided' else clean_customer_email end, E'\n\n',
       clean_message, E'\n\n',
-      'This message was sent from the Syntrex review page so the business could read it directly. Syntrex does not store the message.'
+      'This message was sent from the Syntrex Group Limited review page so the business could read it directly. Syntrex Group Limited does not store the message.'
     ),
     clean_customer_email
   );
@@ -217,7 +217,7 @@ begin
     'Confirm feedback email for ' || business_name,
     concat(
       'This inbox is ready to receive private review notes for ', business_name, '.', E'\n\n',
-      'Customer notes will arrive here. Syntrex does not store them.'
+      'Customer notes will arrive here. Syntrex Group Limited does not store them.'
     ),
     ''
   );

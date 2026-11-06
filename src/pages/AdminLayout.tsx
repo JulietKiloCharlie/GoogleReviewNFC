@@ -16,8 +16,8 @@ export function AdminLayout() {
       <header className="border-b border-line">
         <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-4 px-4 py-4">
           <div className="mr-auto">
-            <p className="text-xs tracking-[0.18em] text-accent">SYNTREX</p>
-            <p className="font-semibold">Review Management</p>
+            <p className="text-xs tracking-wide text-accent">Syntrex Group Limited</p>
+            <p className="font-semibold">Google Review NFC Dashboard</p>
           </div>
           <nav className="flex flex-wrap gap-2">
             {links.map((link) => (

@@ -1,4 +1,4 @@
--- Syntrex Review Platform
+-- Syntrex Group Limited review platform
 -- Customer feedback messages are intentionally not stored.
 
 create extension if not exists pgcrypto;

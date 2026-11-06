@@ -69,7 +69,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         const allowed = await adminUserId();
         if (!allowed) {
           await supabase.auth.signOut();
-          throw new Error("This account is not a Syntrex administrator.");
+          throw new Error("This account is not a Syntrex Group Limited administrator.");
         }
         setIsAdmin(true);
         return "ok";
@@ -87,7 +87,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         const allowed = await adminUserId();
         if (!allowed) {
           await supabase.auth.signOut();
-          throw new Error("This account is not a Syntrex administrator.");
+          throw new Error("This account is not a Syntrex Group Limited administrator.");
         }
         setIsAdmin(true);
       },

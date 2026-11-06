@@ -1,6 +1,6 @@
-# Syntrex Review Platform
+# Google Review NFC Dashboard
 
-Private dashboard for Syntrex staff, plus one public review page per business. Adding a client writes a database row. It does not create a new site, repository, or deployment.
+Private dashboard for Syntrex Group Limited staff, plus one public review page per business. Adding a client writes a database row. It does not create a new site, repository, or deployment.
 
 The NFC card stores a normal HTTPS link, for example `https://your-domain.example/dublin-coffee-house`.
 
@@ -63,7 +63,7 @@ Open `http://localhost:5173/login` and sign in. The service-role key must never 
 
 ## 3. Configure email
 
-Customer feedback is sent to the business and is not saved in the database. Syntrex is not copied.
+Customer feedback is sent to the business and is not saved in the database. Syntrex Group Limited is not copied.
 
 1. Create a free Resend account.
 2. Verify the domain you will send from, such as `syntrex.ie`.
@@ -73,7 +73,7 @@ Customer feedback is sent to the business and is not saved in the database. Synt
 ```powershell
 supabase login
 supabase link
-supabase secrets set RESEND_API_KEY=re_your_key EMAIL_FROM="Syntrex <reviews@syntrex.ie>" APP_URL=https://YOUR-DOMAIN
+supabase secrets set RESEND_API_KEY=re_your_key EMAIL_FROM="Syntrex Group Limited <reviews@syntrex.ie>" APP_URL=https://YOUR-DOMAIN
 supabase functions deploy send-feedback
 supabase functions deploy request-email-verification
 supabase functions deploy confirm-email

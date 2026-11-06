@@ -270,7 +270,7 @@ export function BusinessFormPage() {
         <label className={label}>
           Private feedback email
           <input className={`${field} mt-1.5`} type="email" value={form.feedbackEmail} onChange={(event) => update("feedbackEmail", event.target.value)} required />
-          <span className={hint}>{emailState} The email provider processes messages for delivery. Syntrex does not store them.</span>
+          <span className={hint}>{emailState} The email provider processes messages for delivery. Syntrex Group Limited does not store them.</span>
         </label>
         {existing?.pending_feedback_email && !existing.feedback_email_verified ? (
           <button className={btnGhost} type="button" disabled={busy} onClick={resend}>

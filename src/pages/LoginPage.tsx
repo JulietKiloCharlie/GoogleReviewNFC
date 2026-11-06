@@ -59,9 +59,9 @@ export function LoginPage() {
 
   return (
     <main className="mx-auto flex min-h-screen max-w-md flex-col justify-center px-4 py-10">
-      <p className="text-xs tracking-[0.18em] text-accent">SYNTREX</p>
-      <h1 className="mt-2 text-3xl font-semibold">Review Management</h1>
-      <p className="mt-2 text-sm text-muted">Private dashboard for Syntrex administrators.</p>
+      <p className="text-xs tracking-wide text-accent">Syntrex Group Limited</p>
+      <h1 className="mt-2 text-3xl font-semibold leading-tight">Google Review NFC Dashboard</h1>
+      <p className="mt-2 text-sm text-muted">Private dashboard for Syntrex Group Limited administrators.</p>
       <div className="mt-6">{auth.configured ? null : <SetupNotice />}</div>
       {auth.configured ? (
         <form className="mt-6 space-y-4" onSubmit={onSubmit}>

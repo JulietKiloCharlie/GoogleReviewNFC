@@ -74,7 +74,7 @@ Deno.serve(async (request) => {
       "Open this link within 48 hours:",
       `${appUrl}/verify-email#${token}`,
       "",
-      "Customer messages are emailed to this address and are not stored by Syntrex.",
+      "Customer messages are emailed to this address and are not stored by Syntrex Group Limited.",
       "The email provider processes the message only so it can be delivered.",
     ].join("\n"),
   );
