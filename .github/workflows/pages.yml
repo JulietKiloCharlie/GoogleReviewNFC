@@ -33,7 +33,7 @@ jobs:
           GITHUB_PAGES: "true"
           VITE_SUPABASE_URL: https://xomrqmdjkjhemvmeovkn.supabase.co
           VITE_SUPABASE_ANON_KEY: sb_publishable_X8X5Xrd1Lla8FOPlOUxQwA_H_04P6E0
-          VITE_PUBLIC_SITE_URL: https://julietkilochcharlie.github.io/GoogleReviewNFC
+          VITE_PUBLIC_SITE_URL: https://julietkilocharlie.github.io/GoogleReviewNFC
       - run: cp dist/index.html dist/404.html
       - uses: actions/upload-pages-artifact@v3
         with:
