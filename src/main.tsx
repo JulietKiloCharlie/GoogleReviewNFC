@@ -8,9 +8,11 @@ import "./index.css";
 const root = document.getElementById("root");
 if (!root) throw new Error("Root element missing.");
 
+const basename = import.meta.env.BASE_URL === "/" ? undefined : import.meta.env.BASE_URL.replace(/\/$/, "");
+
 createRoot(root).render(
   <StrictMode>
-    <BrowserRouter>
+    <BrowserRouter basename={basename}>
       <AuthProvider>
         <App />
       </AuthProvider>

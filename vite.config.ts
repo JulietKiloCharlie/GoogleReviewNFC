@@ -3,7 +3,10 @@ import react from "@vitejs/plugin-react";
 import { fileURLToPath, URL } from "node:url";
 import { defineConfig } from "vitest/config";
 
+const pagesBase = process.env.GITHUB_PAGES === "true" ? "/GoogleReviewNFC/" : "/";
+
 export default defineConfig({
+  base: pagesBase,
   plugins: [react(), tailwindcss()],
   resolve: {
     alias: {
