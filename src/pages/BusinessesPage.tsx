@@ -97,7 +97,7 @@ export function BusinessesPage() {
               </div>
               <div className="mt-4 flex flex-wrap gap-2">
                 {live ? (
-                  <a className={btnGhost} href={`/${row.slug}`} target="_blank" rel="noreferrer">
+                  <a className={btnGhost} href={businessUrl(row.slug)} target="_blank" rel="noreferrer">
                     Preview
                   </a>
                 ) : (
