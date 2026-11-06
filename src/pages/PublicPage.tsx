@@ -263,7 +263,8 @@ export function PublicPage() {
           </p>
         )}
       </div>
-      <div className="mt-10 flex justify-center">
+      <div className="mt-10 flex flex-col items-center gap-2">
+        <p className="text-xs text-muted">Powered by</p>
         <BrandLogo className="h-8 w-auto rounded-md" />
       </div>
     </main>
