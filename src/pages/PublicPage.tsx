@@ -84,20 +84,18 @@ export function PublicPage() {
     }
     setBusy(true);
     setError(null);
-    const { data, error: sendError } = await supabase.functions.invoke("send-feedback", {
-      body: {
-        slug: page.slug,
-        rating,
-        message,
-        customerName: name,
-        customerEmail: email,
-        companyWebsite: honeypot,
-      },
+    const { data, error: sendError } = await supabase.rpc("send_public_feedback", {
+      page_slug: page.slug,
+      star_rating: rating,
+      feedback_message: message,
+      customer_name: name,
+      customer_email: email,
+      company_website: honeypot,
     });
     setBusy(false);
     if (sendError || !data || typeof data !== "object" || !("ok" in data) || data.ok !== true) {
-      const detail = data && typeof data === "object" && "error" in data ? String(data.error) : null;
-      setError(detail || "The feedback could not be sent. Please try again.");
+      const detail = data && typeof data === "object" && "error" in data && typeof data.error === "string" ? data.error : null;
+      setError(detail || (sendError ? sendError.message : "The feedback could not be sent. Please try again."));
       return;
     }
     setDone(true);
@@ -129,8 +127,7 @@ export function PublicPage() {
           {busy ? "Sending…" : "Submit feedback"}
         </button>
         <p className="text-xs leading-5 text-muted">
-          Your message is emailed directly to the business. Syntrex does not store it. The email provider processes it only to deliver it.
-          You do not need an account.
+          Your message is emailed directly to the business by FormSubmit. Syntrex does not store it. The business may need to confirm that inbox the first time. You do not need an account.
         </p>
         {error ? <p className="text-sm text-bad">{error}</p> : null}
       </form>
